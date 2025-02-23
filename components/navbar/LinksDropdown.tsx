@@ -17,7 +17,6 @@ function LinksDropdown() {
         <Button variant="outline" className="flex gap-4 max-w-[100px]">
           <LuAlignLeft
             className="!w-6 !h-6 inline-block"
-            // style={{ width: "1.5rem", height: "1.5rem" }}
           />
         </Button>
       </DropdownMenuTrigger>
