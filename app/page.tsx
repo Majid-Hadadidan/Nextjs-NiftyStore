@@ -1,10 +1,12 @@
+import FeaturedProducts from "@/components/home/FeaturedProducts";
+import Hero from "../components/home/Hero";
+
 function HomePage() {
   return (
     <>
-    <div>
-      <h1 className="dark:bg-muted-foreground p-3 text-accent-foreground">HomePage</h1>
-    </div>
+       <Hero />
+       <FeaturedProducts />
     </>
-  )
+  );
 }
-export default HomePage
+export default HomePage;
