@@ -15,7 +15,6 @@ import { CardContent, Card } from "../ui/card";
 const carouselImages = [hero1, hero2, hero3, hero4];
 
 function HeroCarousel() {
-  console.log(carouselImages);
   return (
     <div className="hidden lg:block">
       <Carousel>
