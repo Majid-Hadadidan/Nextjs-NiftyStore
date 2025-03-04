@@ -1303,10 +1303,10 @@ function NavSearch() {
       type='search'
       placeholder='search product...'
       className='max-w-xs dark:bg-muted '
-      onChange={(e) => {
-        setSearch(e.target.value);
-        handleSearch(e.target.value);
-      }}
+        onChange={(e) => {
+          setSearch(e.target.value);
+          handleSearch(e.target.value);
+        }}
       value={search}
     />
   );
