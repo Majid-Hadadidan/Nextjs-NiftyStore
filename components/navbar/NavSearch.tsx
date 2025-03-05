@@ -2,19 +2,14 @@
 import { Input } from '../ui/input';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useDebouncedCallback } from 'use-debounce';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function NavSearch() {
   const searchParams = useSearchParams();
-
   const { replace } = useRouter();
-
-  //useState
   const [search, setSearch] = useState(
     searchParams.get('search')?.toString() || ''
   );
-
-  //hanleSearch
   const handleSearch = useDebouncedCallback((value: string) => {
     const params = new URLSearchParams(searchParams);
     if (value) {
@@ -25,13 +20,11 @@ function NavSearch() {
     replace(`/products?${params.toString()}`);
   }, 300);
 
-  //useEffect 
-  useEffect(() => {
-    if (!searchParams.get('search')) {
-      setSearch('');
-    }
-  }, [searchParams]);
-
+  // useEffect(() => {
+  //   if (!searchParams.get('search')) {
+  //     setSearch('');
+  //   }
+  // }, [searchParams.get('search')]);
   return (
     <Input
       type='search'

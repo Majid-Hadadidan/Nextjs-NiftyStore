@@ -5,11 +5,13 @@ import { formatCurrency } from '@/utils/format';
 import FavoriteToggleButton from '@/components/products/FavoriteToggleButton';
 import AddToCart from '@/components/single-product/AddToCart';
 import ProductRating from '@/components/single-product/ProductRating';
-interface PageProps {
+
+type PageProps = {
   params: { id: string };
-}
-async function SingleProductPage({ params }: PageProps ) {
-  const product = await fetchSingleProduct(params.id);
+};
+
+ const SingleProductPage=async ({ params }: PageProps)=> {
+  const product = await fetchSingleProduct(params.id); // استفاده از params.id
   const { name, image, company, description, price } = product;
   const dollarsAmount = formatCurrency(price);
   return (

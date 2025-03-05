@@ -497,7 +497,8 @@ name String
 ```
 
 - npx prisma migrate dev --name init
-- npx prisma db push
+- npx prisma db push --debug
+
 
 npx prisma migrate dev --name init creates a new migration for your database schema
 changes and applies it, while npx prisma db push directly updates the database schema without creating a migration. In the context of databases, a migration is set of operations, that modify the database schema, helping it evolve over time while preserving existing data.
