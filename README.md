@@ -1585,7 +1585,7 @@ export default Providers;
 npm install @clerk/nextjs
 ```
 
-- create .env.local
+`- create .env.local
 
 ```bash
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
@@ -1596,7 +1596,7 @@ In Next.js, environment variables that start with NEXT*PUBLIC* are exposed to th
 
 For example, NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY can be used in both server-side and client-side code.
 
-On the other hand, CLERK_SECRET_KEY is a server-side environment variable. It's not exposed to the browser, making it suitable for storing sensitive data like API secrets.
+On the other hand, CLERK_SECRET_KEY is a server-side environment variable. It's not exposed to the browser, making it suitable for storing sensitive data like API secrets.`
 
 layout.tsx
 

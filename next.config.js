@@ -7,6 +7,7 @@ const nextConfig = {
         hostname: "images.pexels.com",
       },
     ],
+    domains: ["img.clerk.com"], // اضافه کردن دامنه مورد نظر
   },
 };
 
