@@ -14,7 +14,7 @@ function Hero() {
           numquam doloremque nam non cum quo placeat mollitia suscipit nisi!
         </p>
         <Button size='lg'  className="mt-10" asChild>
-          <Link href={'/prodcuts'}>Our Products</Link>
+          <Link href='/products'>Our Products</Link>
         </Button>
       </div>
       <HeroCarousel />
