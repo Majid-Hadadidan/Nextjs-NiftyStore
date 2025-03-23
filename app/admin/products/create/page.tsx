@@ -1,13 +1,13 @@
+import { SubmitButton } from "@/components/form/Buttons";
+import CheckboxInput from "@/components/form/CheckBoxInput";
+import FormContainer from "@/components/form/FormContainer";
 import FormInput from "@/components/form/FormInput";
+import ImageInput from "@/components/form/ImageInput";
+import PriceInput from "@/components/form/PriceInput";
+import TextAreaInput from "@/components/form/TextAreaInput";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { createProductAction } from "@/utils/actions";
 import { faker } from "@faker-js/faker";
-export async function createProductAction(formData: FormData) {
-  "use server";
-  const name = formData.get("name");
-  console.log(name);
-}
 
 function CreateProductPage() {
   const name = faker.commerce.productName();
@@ -20,12 +20,33 @@ function CreateProductPage() {
           create product
         </h1>
         <div className="border p-8">
-          <form action={createProductAction}>
-           <FormInput name="name" type="text" label="product name" defaultValue={name}/>
-            <Button size="lg" type="submit">
-              Submit
-            </Button>
-          </form>
+          <FormContainer action={createProductAction}>
+            <div className="grid gap-4 md:grid-cols-2 my-4">
+              <FormInput
+                name="name"
+                type="text"
+                label="product name"
+                defaultValue={name}
+              />
+              <FormInput
+                name="company"
+                type="text"
+                label="company name"
+                defaultValue={company}
+              />
+              <PriceInput />
+              <ImageInput />
+            </div>
+            <TextAreaInput
+              name="description"
+              labelText="product description"
+              defaultValue={description}
+            />
+            <div className="mt-6">
+              <CheckboxInput name="feature" label="feature" />
+            </div>
+            <SubmitButton text='create prodocut' className="mt-8"/>
+          </FormContainer>
         </div>
       </section>
     </div>
