@@ -5,7 +5,6 @@ import FormInput from "@/components/form/FormInput";
 import ImageInput from "@/components/form/ImageInput";
 import PriceInput from "@/components/form/PriceInput";
 import TextAreaInput from "@/components/form/TextAreaInput";
-import { Button } from "@/components/ui/button";
 import { createProductAction } from "@/utils/actions";
 import { faker } from "@faker-js/faker";
 
@@ -43,7 +42,7 @@ function CreateProductPage() {
               defaultValue={description}
             />
             <div className="mt-6">
-              <CheckboxInput name="feature" label="feature" />
+              <CheckboxInput name="featured" label="featured"  />
             </div>
             <SubmitButton text='create prodocut' className="mt-8"/>
           </FormContainer>
