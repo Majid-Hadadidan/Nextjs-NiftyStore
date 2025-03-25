@@ -1,7 +1,8 @@
 import db from "@/utils/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { productSchema, validateWithZodSchema } from "./schmas";
+import { imageSchema, productSchema, validateWithZodSchema } from "./schmas";
+import { uploadImage } from "./supabase";
 
 //clerk authentication id
 const getAuthUser = async () => {
@@ -24,26 +25,27 @@ export const createProductAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
-  "use server";
+  'use server'
   const user = await getAuthUser();
 
   try {
     const rawData = Object.fromEntries(formData);
-    const validatedFields = validateWithZodSchema(productSchema,rawData)
+    const file = formData.get('image') as File;
+    const validatedFields = validateWithZodSchema(productSchema, rawData);
+    const validatedFile = validateWithZodSchema(imageSchema, { image: file });
+    const fullPath = await uploadImage(validatedFile.image);
 
-    
-    
     await db.product.create({
       data: {
         ...validatedFields,
-        image: "/images/product-3.jpg",
+        image: fullPath,
         clerkId: user.id,
       },
     });
-    return { message: "product created" };
   } catch (error) {
     return renderError(error);
   }
+    redirect('/admin/products');
 };
 
 export const fetchFeaturedProducts = async () => {

@@ -2533,7 +2533,7 @@ function validateImageFile() {
     }, `File size must be less than 1 MB`)
     .refine((file) => {
       return (
-        !file || acceptedFileTypes.some((type) => file.type.startsWith(type))
+        !file || acceptedFileTypes.some((format) => file.type.startsWith(format))
       );
     }, 'File must be an image');
 }
@@ -2629,7 +2629,7 @@ export const createProductAction = async (
   } catch (error) {
     return renderError(error);
   }
-  redirect('/admin/products');
+    redirect('/admin/products');
 };
 ```
 

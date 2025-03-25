@@ -1,4 +1,3 @@
-import { DevBundlerService } from "next/dist/server/lib/dev-bundler-service";
 import { z, ZodSchema } from "zod";
 
 //zod function
@@ -34,7 +33,27 @@ export function validateWithZodSchema<T>(
   const result = schema.safeParse(data);
   if (!result.success) {
     const errors = result.error.errors.map((error) => error.message);
-    throw new Error(errors.join(', '));
+    throw new Error(errors.join(","));
   }
   return result.data;
+}
+
+export const imageSchema = z.object({
+  image: validateImageFile(),
+});
+
+
+function validateImageFile() {
+  const maxUploadSize = 1024 * 1024;
+  const acceptedFileTypes = ['image/'];
+  return z
+    .instanceof(File)
+    .refine((file) => {
+      return !file || file.size <= maxUploadSize;
+    }, `File size must be less than 1 MB`)
+    .refine((file) => {
+      return (
+        !file || acceptedFileTypes.some((format) => file.type.startsWith(format))
+      );
+    }, 'File must be an image');
 }
