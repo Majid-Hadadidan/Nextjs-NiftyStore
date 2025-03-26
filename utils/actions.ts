@@ -13,6 +13,11 @@ const getAuthUser = async () => {
   return user;
 };
 
+async function getAdminUser() {
+  const user = await getAuthUser();
+  if (user.id !== process.env.ADMIN_USER_ID) redirect("/");
+  return user;
+}
 //error handler
 function renderError(error: unknown): { message: string } {
   return {
@@ -25,12 +30,12 @@ export const createProductAction = async (
   prevState: any,
   formData: FormData
 ): Promise<{ message: string }> => {
-  'use server'
+  "use server";
   const user = await getAuthUser();
 
   try {
     const rawData = Object.fromEntries(formData);
-    const file = formData.get('image') as File;
+    const file = formData.get("image") as File;
     const validatedFields = validateWithZodSchema(productSchema, rawData);
     const validatedFile = validateWithZodSchema(imageSchema, { image: file });
     const fullPath = await uploadImage(validatedFile.image);
@@ -45,7 +50,18 @@ export const createProductAction = async (
   } catch (error) {
     return renderError(error);
   }
-    redirect('/admin/products');
+  redirect("/admin/products");
+};
+
+//when user Create new Product redirect to products and we must fetch products
+export const fetchAdminProducts = async () => {
+  await getAdminUser();
+  const products = await db.product.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return products;
 };
 
 export const fetchFeaturedProducts = async () => {
@@ -81,4 +97,27 @@ export const fetchSingleProduct = async (productId: string) => {
     redirect("/products");
   }
   return product;
+};
+
+//when we click delteButton in admin/products ,we must delete that products
+
+import { revalidatePath } from 'next/cache';
+
+export const deleteProductAction = async (prevState: { productId: string }) => {
+  'use server'
+  const { productId } = prevState;
+  await getAdminUser();
+
+  try {
+    await db.product.delete({
+      where: {
+        id: productId,
+      },
+    });
+
+    revalidatePath('/admin/products');
+    return { message: 'product removed' };
+  } catch (error) {
+    return renderError(error);
+  }
 };
