@@ -2,7 +2,7 @@ import db from "@/utils/db";
 import { currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { imageSchema, productSchema, validateWithZodSchema } from "./schmas";
-import { uploadImage } from "./supabase";
+import { deleteImage, uploadImage } from "./supabase";
 
 //clerk authentication id
 const getAuthUser = async () => {
@@ -101,22 +101,22 @@ export const fetchSingleProduct = async (productId: string) => {
 
 //when we click delteButton in admin/products ,we must delete that products
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath } from "next/cache";
 
 export const deleteProductAction = async (prevState: { productId: string }) => {
-  'use server'
+  "use server";
   const { productId } = prevState;
   await getAdminUser();
 
   try {
-    await db.product.delete({
+    const product = await db.product.delete({
       where: {
         id: productId,
       },
     });
-
-    revalidatePath('/admin/products');
-    return { message: 'product removed' };
+    await deleteImage(product.image);
+    revalidatePath("/admin/products");
+    return { message: "product removed" };
   } catch (error) {
     return renderError(error);
   }
