@@ -13,12 +13,12 @@ const getAuthUser = async () => {
   return user;
 };
 
-async function getAdminUser() {
+const getAdminUser = async () => {
   const user = await getAuthUser();
   if (user.id !== process.env.ADMIN_USER_ID) redirect("/");
   return user;
-}
-//error handler
+};
+// error handler
 function renderError(error: unknown): { message: string } {
   return {
     message: error instanceof Error ? error.message : "An error occurred",
@@ -27,7 +27,7 @@ function renderError(error: unknown): { message: string } {
 
 //createProduct when user click submit button
 export const createProductAction = async (
-  prevState: any,
+  prevState: unknown,
   formData: FormData
 ): Promise<{ message: string }> => {
   "use server";
@@ -107,7 +107,6 @@ export const deleteProductAction = async (prevState: { productId: string }) => {
   "use server";
   const { productId } = prevState;
   await getAdminUser();
-
   try {
     const product = await db.product.delete({
       where: {
@@ -117,6 +116,69 @@ export const deleteProductAction = async (prevState: { productId: string }) => {
     await deleteImage(product.image);
     revalidatePath("/admin/products");
     return { message: "product removed" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export async function fetchAdminProductDetails(productId: string) {
+  await getAdminUser();
+  const product = await db.product.findUnique({
+    where: {
+      id: productId,
+    },
+  });
+  if (!product) redirect("/admin/products");
+  return product;
+}
+
+export async function UpdateProductAction(prevState: unknown, formData: FormData) {
+  'use server'
+  try {
+    const productId = formData.get("id") as string;
+    const rawData = Object.fromEntries(formData);
+    const validatedFields = validateWithZodSchema(productSchema, rawData);
+
+    await db.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        ...validatedFields,
+      },
+    });
+    revalidatePath(`/admin/products/${productId}/edit`);
+
+    return { message: "Product Update Successfully" };
+  } catch (error) {
+    return renderError(error)
+  }
+}
+
+export const updateProductImageAction = async (
+  prevState: unknown,
+  formData: FormData
+) => {
+  'use server'
+  await getAuthUser();
+  try {
+    const image = formData.get('image') as File;
+    const productId = formData.get('id') as string;
+    const oldImageUrl = formData.get('url') as string;
+
+    const validatedFile = validateWithZodSchema(imageSchema, { image });
+    const fullPath = await uploadImage(validatedFile.image);
+    await deleteImage(oldImageUrl);
+    await db.product.update({
+      where: {
+        id: productId,
+      },
+      data: {
+        image: fullPath,
+      },
+    });
+    revalidatePath(`/admin/products/${productId}/edit`);
+    return { message: 'Product Image updated successfully' };
   } catch (error) {
     return renderError(error);
   }
