@@ -132,8 +132,11 @@ export async function fetchAdminProductDetails(productId: string) {
   return product;
 }
 
-export async function UpdateProductAction(prevState: unknown, formData: FormData) {
-  'use server'
+export async function UpdateProductAction(
+  prevState: unknown,
+  formData: FormData
+) {
+  "use server";
   try {
     const productId = formData.get("id") as string;
     const rawData = Object.fromEntries(formData);
@@ -151,7 +154,7 @@ export async function UpdateProductAction(prevState: unknown, formData: FormData
 
     return { message: "Product Update Successfully" };
   } catch (error) {
-    return renderError(error)
+    return renderError(error);
   }
 }
 

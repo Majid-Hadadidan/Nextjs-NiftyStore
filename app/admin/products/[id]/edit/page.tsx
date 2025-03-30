@@ -5,11 +5,15 @@ import FormInput from "@/components/form/FormInput";
 import ImageInputContainer from "@/components/form/ImageInputContainer";
 import PriceInput from "@/components/form/PriceInput";
 import TextAreaInput from "@/components/form/TextAreaInput";
-import { fetchAdminProductDetails, UpdateProductAction, updateProductImageAction } from "@/utils/actions";
+import {
+  fetchAdminProductDetails,
+  UpdateProductAction,
+  updateProductImageAction,
+} from "@/utils/actions";
 async function EditProductPage({ params }: { params: { id: string } }) {
   const id = params.id;
 
-  const { name, company, price, featured, description,image } =
+  const { name, company, price, featured, description, image } =
     await fetchAdminProductDetails(id);
   return (
     <section>
@@ -19,8 +23,8 @@ async function EditProductPage({ params }: { params: { id: string } }) {
         <div className="border p-8 rounded-md">
           <ImageInputContainer
             action={updateProductImageAction}
-            name={name}
             image={image}
+            name={name}
             text="update image"
           >
             <input type="hidden" name="id" value={id} />
