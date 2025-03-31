@@ -3330,12 +3330,12 @@ export const fetchUserFavorites = async () => {
 ```tsx
 'use client';
 
-import LoadingContainer from '@/components/global/LoadingContainer';
+// import LoadingContainer from '@/components/global/LoadingContainer';
 
-function loading() {
-  return <LoadingContainer />;
-}
-export default loading;
+// function loading() {
+//   return <LoadingContainer />;
+// }
+// export default loading;
 ```
 
 page.tsx

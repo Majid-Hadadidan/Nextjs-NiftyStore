@@ -24,7 +24,7 @@ model Product {
 }
 model Favorite {
   id        String   @id @default(uuid())
-  clerkId  String
+  clerkId   String
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId String
   createdAt DateTime @default(now())
