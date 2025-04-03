@@ -15,6 +15,7 @@ function FavoriteToggleForm({
   favoriteId,
 }: FavoriteToggleFormProps) {
   const pathname = usePathname();
+  console.log('pathname',pathname)
   const toggleAction = toggleFavoriteAction.bind(null, {
     productId,
     favoriteId,
