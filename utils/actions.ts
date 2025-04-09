@@ -1,8 +1,13 @@
-'use server'
+"use server";
 import db from "@/utils/db";
 import { currentUser, getAuth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { imageSchema, productSchema, validateWithZodSchema } from "./schmas";
+import {
+  imageSchema,
+  productSchema,
+  reviewSchema,
+  validateWithZodSchema,
+} from "./schmas";
 import { deleteImage, uploadImage } from "./supabase";
 
 //clerk authentication id
@@ -189,7 +194,7 @@ export const updateProductImageAction = async (
 };
 
 export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
-  'use server'
+  "use server";
   const user = await getAuthUser();
   const favorite = await db.favorite.findFirst({
     where: {
@@ -203,16 +208,15 @@ export const fetchFavoriteId = async ({ productId }: { productId: string }) => {
   return favorite?.id || null;
 };
 
-
 //if favoriteId exist ,delete that ==>if doesn't exist create that
 export const toggleFavoriteAction = async (prevState: {
   productId: string;
   favoriteId: string | null;
   pathname: string;
 }) => {
-  'use server'
+  "use server";
   const user = await getAuthUser();
-    const { productId, favoriteId, pathname } = prevState;
+  const { productId, favoriteId, pathname } = prevState;
   try {
     if (favoriteId) {
       await db.favorite.delete({
@@ -229,12 +233,11 @@ export const toggleFavoriteAction = async (prevState: {
       });
     }
     revalidatePath(pathname);
-    return { message: favoriteId ? 'Removed from Faves' : 'Added to Faves' };
+    return { message: favoriteId ? "Removed from Faves" : "Added to Faves" };
   } catch (error) {
     return renderError(error);
   }
-}
-
+};
 
 //fecth whole favoriteId and prodcut with its favoriteId
 
@@ -250,3 +253,34 @@ export const fetchUserFavorites = async () => {
   });
   return favorites;
 };
+
+//save review to database
+export const createReviewAction = async (
+  prevState: any,
+  formData: FormData
+) => {
+  const user = await getAuthUser();
+  try {
+    const rawData = Object.fromEntries(formData);
+
+    const validatedFields = validateWithZodSchema(reviewSchema, rawData);
+
+    await db.review.create({
+      data: {
+        ...validatedFields,
+        clerkId: user.id,
+      },
+    });
+    revalidatePath(`/products/${validatedFields.productId}`);
+    return { message: 'Review submitted successfully' };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+
+export const fetchProductReviews = async () => {};
+export const fetchProductReviewsByUser = async () => {};
+export const deleteReviewAction = async () => {};
+export const findExistingReview = async () => {};
+export const fetchProductRating = async () => {};

@@ -3360,7 +3360,7 @@ async function FavoritesPage() {
 export default FavoritesPage;
 ```
 
-### React Share
+### React   
 
 [React Share](https://www.npmjs.com/package/react-share)
 
