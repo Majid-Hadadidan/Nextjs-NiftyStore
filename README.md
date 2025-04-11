@@ -3671,7 +3671,7 @@ export const createReviewAction = async (
 ### Rating Component
 
 ```tsx
-import { FaStar, FaRegStar } from 'react-icons/fa';
+i mport { FaStar, FaRegStar } from 'react-icons/fa';
 
 function Rating({ rating }: { rating: number }) {
   // rating = 2
@@ -3850,6 +3850,7 @@ export const fetchProductRating = async (productId: string) => {
       rating: true,
     },
     _count: {
+    
       rating: true,
     },
     where: {
@@ -3896,6 +3897,8 @@ export const fetchProductReviewsByUser = async () => {
   });
   return reviews;
 };
+
+
 export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   const { reviewId } = prevState;
   const user = await getAuthUser();

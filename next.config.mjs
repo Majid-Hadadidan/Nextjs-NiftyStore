@@ -10,8 +10,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "ehsuvlyzdsqrkdsucwiv.supabase.co",
       },
+      {
+        protocol: "https",   
+        hostname: "img.clerk.com",
+      },
     ],
-    domains: ["img.clerk.com"], // اضافه کردن دامنه مورد نظر
+    domains: ["img.clerk.com"], 
   },
 };
 
