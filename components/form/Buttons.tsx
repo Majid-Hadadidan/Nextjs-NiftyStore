@@ -93,22 +93,34 @@ export const CardSignInButton = () => {
   );
 };
 
+//favorite
 export const CardSubmitButton = ({ isFavorite }: { isFavorite: boolean }) => {
   const { pending } = useFormStatus();
   return (
     <Button
-      type='submit'
-      size='icon'
-      variant='outline'
-      className=' p-2 cursor-pointer'
+      type="submit"
+      size="icon"
+      variant="outline"
+      className=" p-2 cursor-pointer"
     >
       {pending ? (
-        <Loader2 className=' animate-spin' />
+        <Loader2 className=" animate-spin" />
       ) : isFavorite ? (
         <FaHeart />
       ) : (
         <FaRegHeart />
       )}
     </Button>
+  );
+};
+
+//cart
+export const ProductSignInButton = () => {
+  return (
+    <SignInButton mode='modal'>
+      <Button type='button' size='default' className='mt-8'>
+        Please Sign In
+      </Button>
+    </SignInButton>
   );
 };

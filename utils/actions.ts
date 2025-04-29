@@ -1,6 +1,6 @@
 "use server";
 import db from "@/utils/db";
-import { currentUser, getAuth } from "@clerk/nextjs/server";
+import { auth, currentUser, getAuth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import {
   imageSchema,
@@ -352,10 +352,34 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
 };
 
 export const findExistingReview = async (userId: string, productId: string) => {
-  return  db.review.findFirst({
+  return db.review.findFirst({
     where: {
       productId,
       clerkId: userId,
     },
   });
 };
+//***************Cart,CartItem,*************** */
+export const fetchCartItems = async () => {
+  const { userId } = await auth();
+  const cart = await db.cart.findFirst({
+    where: {
+      clerkId: userId ?? "",
+    },
+    select: {
+      numItemsInCart: true,
+    },
+  });
+  return cart?.numItemsInCart || 0;
+};
+
+export async function addToCartAction(prevState: unknown, formData: FormData) {
+  return { message: "product added to the cart " };
+}
+
+// async function fetchProduct() {}
+// export async function fetchOrCreateCart() {}
+// async function updateOrCreateCartItem() {}
+// export async function updateCart() {}
+// export async function removeCartItemAction() {}
+// export async function updateCartItemAction() {}
