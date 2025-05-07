@@ -374,11 +374,14 @@ export const fetchCartItems = async () => {
   return cart?.numItemsInCart || 0;
 };
 //add items to cart and cartItem
-export const addToCartAction = async (prevState: any, formData: FormData) => {
+export const addToCartAction = async (
+  prevState: unknown,
+  formData: FormData
+) => {
   const user = await getAuthUser();
   try {
-    const productId = formData.get('productId') as string;
-    const amount = Number(formData.get('amount'));
+    const productId = formData.get("productId") as string;
+    const amount = Number(formData.get("amount"));
     await fetchProduct(productId);
     const cart = await fetchOrCreateCart({ userId: user.id });
     await updateOrCreateCartItem({ productId, cartId: cart.id, amount });
@@ -386,7 +389,7 @@ export const addToCartAction = async (prevState: any, formData: FormData) => {
   } catch (error) {
     return renderError(error);
   }
-  redirect('/cart');
+  redirect("/cart");
 };
 
 async function fetchProduct(productId: string) {
@@ -477,7 +480,7 @@ async function updateOrCreateCartItem({
   }
 }
 
-//update cart after create cartItem and cart 
+//update cart after create cartItem and cart
 //udate cart afte check and retrieve cartTotal and numIteminCart in cartItem
 export async function updateCart(cart: Cart) {
   const cartItems = await db.cartItem.findMany({
@@ -499,7 +502,7 @@ export async function updateCart(cart: Cart) {
   const shipping = cartTotal ? cart.shipping : 0;
   const orderTotal = cartTotal + shipping + tax;
 
-  await db.cart.update({
+  const currentCart = await db.cart.update({
     where: {
       id: cart.id,
     },
@@ -509,7 +512,17 @@ export async function updateCart(cart: Cart) {
       tax,
       orderTotal,
     },
+    include: includeProductClause,
   });
+  return currentCart;
 }
 // export async function removeCartItemAction() {}
 // export async function updateCartItemAction() {}
+
+export async function createOrderAction(
+  prevState: unknown,
+  formData: FormData
+) {
+  console.log(prevState, formData);
+  return { message: "order created" };
+}
