@@ -481,7 +481,7 @@ async function updateOrCreateCartItem({
 }
 
 //update cart after create cartItem and cart
-//udate cart afte check and retrieve cartTotal and numIteminCart in cartItem
+//udate cart after check and retrieve cartTotal and numIteminCart in cartItem
 export async function updateCart(cart: Cart) {
   const cartItems = await db.cartItem.findMany({
     where: {
@@ -526,3 +526,60 @@ export async function createOrderAction(
   console.log(prevState, formData);
   return { message: "order created" };
 }
+
+export const removeCartItemAction = async (
+  prevState: unknown,
+  formData: FormData
+) => {
+  const user = await getAuthUser();
+  try {
+    const cartItemId = formData.get("id") as string;
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    });
+    await db.cartItem.delete({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+    });
+
+    await updateCart(cart);
+    revalidatePath("/cart");
+    return { message: "Item removed from cart" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+
+export const updateCartItemAction = async ({
+  amount,
+  cartItemId,
+}: {
+  amount: number;
+  cartItemId: string;
+}) => {
+  const user = await getAuthUser();
+
+  try {
+    const cart = await fetchOrCreateCart({
+      userId: user.id,
+      errorOnFailure: true,
+    });
+    await db.cartItem.update({
+      where: {
+        id: cartItemId,
+        cartId: cart.id,
+      },
+      data: {
+        amount,
+      },
+    });
+    await updateCart(cart);
+    revalidatePath('/cart');
+    return { message: 'cart updated' };
+  } catch (error) {
+    return renderError(error);
+  }
+};

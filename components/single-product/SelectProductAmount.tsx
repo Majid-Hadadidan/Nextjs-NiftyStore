@@ -33,7 +33,7 @@ function SelectProductAmount(
 
   return (
     <>
-      <h4 className='mb-2'>Amount : </h4>
+      <h4 className='mb-2 font-semibold'>Amount : </h4>
       <Select
         defaultValue={amount.toString()}
         onValueChange={(value) => setAmount(Number(value))}

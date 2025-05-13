@@ -5,7 +5,7 @@ import Link from "next/link";
 //firs column
 export function FirstColumn({ image, name }: { image: string; name: string }) {
     return (
-      <div className="relative h-24 w-24 sm:h-32 sm:w-32">
+      <div className="relative h-24 w-24 md:h-32 md:w-32">
         <Image
           src={image}
           alt={name}
@@ -28,7 +28,7 @@ export function FirstColumn({ image, name }: { image: string; name: string }) {
     name: string;
   }) {
     return (
-      <div className="sm:w-48">
+      <div className="md:w-48">
         <Link href={`/products/${productId}`}>
           <h3 className="font-medium capitalize hover:underline">{name}</h3>
         </Link>
