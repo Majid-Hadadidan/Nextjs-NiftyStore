@@ -1,3 +1,4 @@
+'use client'
 import { CartItemWithProduct } from "@/utils/types";
 import { Card } from "../ui/card";
 import { FirstColumn, FourthColumn, SecondColumn } from "./CartItemColumns";

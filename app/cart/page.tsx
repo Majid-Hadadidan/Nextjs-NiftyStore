@@ -9,9 +9,9 @@ async function CartPage() {
   const { userId } = await auth();
   if (!userId) redirect("/");
   const previousCart = await fetchOrCreateCart({ userId });
-  const cart=await updateCart(previousCart);
+  const { currentCart, cartItems } = await updateCart(previousCart);
 
-  if (cart.numItemsInCart === 0) {
+  if (cartItems.length === 0) {
     return <SectionTitle text="Empty cart" />;
   }
   return (
@@ -19,10 +19,10 @@ async function CartPage() {
       <SectionTitle text="Shopping Cart" />
       <div className="grid gap-4 lg:grid-cols-12 mt-8">
         <div className="lg:col-span-8">
-          <CartItemsList cartItem={cart.cartItems} />
+          <CartItemsList cartItem={cartItems} />
         </div>
         <div className="lg:col-span-4 lg:pl-4">
-          <CartTotals cart={cart} />
+          <CartTotals cart={currentCart} />
         </div>
       </div>
     </>

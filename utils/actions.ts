@@ -490,6 +490,9 @@ export async function updateCart(cart: Cart) {
     include: {
       product: true,
     },
+    orderBy:{
+      createdAt:'asc'
+    }
   });
   let numItemsInCart = 0;
   let cartTotal = 0;
@@ -514,7 +517,7 @@ export async function updateCart(cart: Cart) {
     },
     include: includeProductClause,
   });
-  return currentCart;
+  return {cartItems,currentCart};
 }
 // export async function removeCartItemAction() {}
 // export async function updateCartItemAction() {}
