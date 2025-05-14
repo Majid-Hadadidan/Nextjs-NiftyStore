@@ -4288,7 +4288,7 @@ export const fetchOrCreateCart = async ({
   });
 
   if (!cart && errorOnFailure) {
-    throw new Error('Cart not found');
+    throw new Error('Cart not found'); 
   }
 
   if (!cart) {
