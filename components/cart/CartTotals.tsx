@@ -6,7 +6,7 @@ import FormContainer from '../form/FormContainer';
 import { SubmitButton } from '../form/Buttons';
 import { Cart } from '@prisma/client';
 
-function CartTotals({ cart }: { cart: Cart }) {
+ function CartTotals({ cart }: { cart: Cart }) {
   const { cartTotal, shipping, tax, orderTotal } = cart;
   return (
     <div>

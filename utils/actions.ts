@@ -584,18 +584,29 @@ export const updateCartItemAction = async ({
 
 //*********************Order********************* */
 //==============================================
-export async function createOrderAction(
+export const createOrderAction = async (
   prevState: unknown,
   formData: FormData
-) {
+) => {
+  console.log(prevState, formData);
   const user = await getAuthUser();
+  let orderId: null | string = null;
+  let cartId: null | string = null;
   try {
     const cart = await fetchOrCreateCart({
       userId: user.id,
       errorOnFailure: true,
     });
+    cartId = cart.id;
 
-   await db.order.create({
+    await db.order.deleteMany({
+      where: {
+        clerkId: user.id,
+        isPaid: false,
+      },
+    });
+
+    const order = await db.order.create({
       data: {
         clerkId: user.id,
         products: cart.numItemsInCart,
@@ -605,16 +616,13 @@ export async function createOrderAction(
         email: user.emailAddresses[0].emailAddress,
       },
     });
-    await db.cart.delete({
-      where: {
-        id: cart.id,
-      },
-    });
+
+    orderId = order.id;
   } catch (error) {
     renderError(error);
   }
-  redirect("/orders");
-}
+  redirect(`/checkout?orderId=${orderId}&cartId=${cartId}`);
+};
 
 export const fetchUserOrders = async () => {
   const user = await getAuthUser();
@@ -624,7 +632,7 @@ export const fetchUserOrders = async () => {
       isPaid: true,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
   });
   return orders;
